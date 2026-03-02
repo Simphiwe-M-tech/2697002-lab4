@@ -23,9 +23,7 @@ async function searchCountry(countryName) {
         // Show spinner
         loadingSpinner.classList.remove('hidden');
 
-        // =========================
-        // 1️⃣ Fetch country by name
-        // =========================
+
         const response = await fetch(
             `https://restcountries.com/v3.1/name/${countryName}?fullText=true`
         );
@@ -47,7 +45,7 @@ async function searchCountry(countryName) {
         const flag = country.flags?.svg || "";
 
         // =========================
-        // 2️⃣ Display Country Info
+        // Display Country Info
         // =========================
         countryInfo.innerHTML = `
             <h2>${countryNameCommon}</h2>
@@ -60,7 +58,7 @@ async function searchCountry(countryName) {
         countryInfo.classList.remove('hidden');
 
         // =========================
-        // 3️⃣ Fetch Bordering Countries
+        // Fetch Bordering Countries
         // =========================
         if (country.borders && country.borders.length > 0) {
 
