@@ -29,7 +29,7 @@ async function searchCountry(countryName) {
         );
 
         if (!response.ok) {
-            throw new Error("Country not found. Please check spelling.");
+            throw new Error("Country Not Found. Please check spelling.");
         }
 
         const data = await response.json();
