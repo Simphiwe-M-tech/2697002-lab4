@@ -10,7 +10,7 @@ const errorMessage = document.getElementById('error-message');
 async function searchCountry(countryName) {
     try {
         if (!countryName.trim()) {
-            throw new Error("Please enter a country name.");
+            throw new Error("Please Enter A Country Name.");
         }
 
         // Reset UI
