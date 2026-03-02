@@ -12,24 +12,29 @@ async function searchCountry(countryName) {
     // =========================
     // ALWAYS Reset UI First
     // =========================
+    const trimmedName = countryName.trim();
     errorMessage.classList.add('hidden');
     errorMessage.textContent = '';
     countryInfo.classList.add('hidden');
     borderingCountries.classList.add('hidden');
     countryInfo.innerHTML = '';
     borderingCountries.innerHTML = '';
+    
 
     try {
 
-        if (!countryName.trim()) {
-            throw new Error("Please enter a country name.");
-        }
+       errorMessage.classList.add('hidden');
+    errorMessage.textContent = '';
+    countryInfo.classList.add('hidden');
+    borderingCountries.classList.add('hidden');
+    countryInfo.innerHTML = '';
+    borderingCountries.innerHTML = '';
 
         // Show spinner
         loadingSpinner.classList.remove('hidden');
 
         const response = await fetch(
-            `https://restcountries.com/v3.1/name/${countryName}?fullText=true`
+            `https://restcountries.com/v3.1/name/${trimmedName}?fullText=true`
         );
 
         if (!response.ok) {
