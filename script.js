@@ -8,34 +8,37 @@ const errorMessage = document.getElementById('error-message');
 
 // Main function
 async function searchCountry(countryName) {
-    try {
-        if (!countryName.trim()) {
-            throw new Error("Please Enter A Country Name.");
-        }
 
-        // Reset UI
-        errorMessage.classList.add('hidden');
-        countryInfo.classList.add('hidden');
-        borderingCountries.classList.add('hidden');
-        borderingCountries.innerHTML = '';
-        countryInfo.innerHTML = '';
+    // =========================
+    // ALWAYS Reset UI First
+    // =========================
+    errorMessage.classList.add('hidden');
+    errorMessage.textContent = '';
+    countryInfo.classList.add('hidden');
+    borderingCountries.classList.add('hidden');
+    countryInfo.innerHTML = '';
+    borderingCountries.innerHTML = '';
+
+    try {
+
+        if (!countryName.trim()) {
+            throw new Error("Please enter a country name.");
+        }
 
         // Show spinner
         loadingSpinner.classList.remove('hidden');
-
 
         const response = await fetch(
             `https://restcountries.com/v3.1/name/${countryName}?fullText=true`
         );
 
         if (!response.ok) {
-            throw new Error("Country Not Found. Please check spelling.");
+            throw new Error("Country not found. Please check spelling.");
         }
 
         const data = await response.json();
-        const country = data[0]; // API returns an array
+        const country = data[0];
 
-        // Extract fields safely based on API structure
         const countryNameCommon = country.name?.common || "N/A";
         const capital = country.capital ? country.capital[0] : "N/A";
         const population = country.population
@@ -44,9 +47,7 @@ async function searchCountry(countryName) {
         const region = country.region || "N/A";
         const flag = country.flags?.svg || "";
 
-        // =========================
-        // Display Country Info
-        // =========================
+        // Display country info
         countryInfo.innerHTML = `
             <h2>${countryNameCommon}</h2>
             <p><strong>Capital:</strong> ${capital}</p>
@@ -57,20 +58,12 @@ async function searchCountry(countryName) {
 
         countryInfo.classList.remove('hidden');
 
-        // =========================
-        // Fetch Bordering Countries
-        // =========================
+        // Bordering countries
         if (country.borders && country.borders.length > 0) {
 
-            // Fetch by alpha code as required in Part 5
             const borderPromises = country.borders.map(code =>
                 fetch(`https://restcountries.com/v3.1/alpha/${code}`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error("Error fetching bordering countries.");
-                        }
-                        return res.json();
-                    })
+                    .then(res => res.json())
             );
 
             const borderData = await Promise.all(borderPromises);
@@ -85,21 +78,19 @@ async function searchCountry(countryName) {
                          alt="${borderCountry.name.common} flag" 
                          width="80">
                 `;
-
                 borderingCountries.appendChild(borderDiv);
             });
 
             borderingCountries.classList.remove('hidden');
-
-        } else {
-            borderingCountries.innerHTML = "<p>No bordering countries.</p>";
-            borderingCountries.classList.remove('hidden');
         }
 
     } catch (error) {
+
         errorMessage.textContent = error.message;
         errorMessage.classList.remove('hidden');
+
     } finally {
+
         loadingSpinner.classList.add('hidden');
     }
 }
