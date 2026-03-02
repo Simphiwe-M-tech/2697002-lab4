@@ -13,12 +13,14 @@ async function searchCountry(countryName) {
     // ALWAYS Reset UI First
     // =========================
     const trimmedName = countryName.trim();
-    errorMessage.classList.add('hidden');
-    errorMessage.textContent = '';
+    if(!trimmedName){
+      errorMessage.classList.remove('hidden');
+        errorMessage.textContent = 'please enter country name';  
+        borderingCountries.classList.add('hidden');
     countryInfo.classList.add('hidden');
-    borderingCountries.classList.add('hidden');
-    countryInfo.innerHTML = '';
-    borderingCountries.innerHTML = '';
+    loadingSpinner.classList.add('hidden');
+    return;
+    }
     
 
     try {
